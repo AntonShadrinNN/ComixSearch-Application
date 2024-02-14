@@ -1,9 +1,10 @@
 package main
 
 import (
-	"fmt"
+	"comixsearch/internal"
 )
 
 func main() {
-	fmt.Println("Hello, world")
+	s := &internal.ServiceXKCD{}
+	s.Run()
 }
