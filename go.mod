@@ -6,6 +6,7 @@ require (
 	github.com/jackc/pgx/v5 v5.5.3
 	github.com/kljensen/snowball v0.9.0
 	golang.org/x/sync v0.1.0
+	gopkg.in/yaml.v3 v3.0.1
 )
 
 require (
@@ -16,6 +17,7 @@ require (
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect
 	github.com/go-playground/validator/v10 v10.14.0 // indirect
+	github.com/go-yaml/yaml v2.1.0+incompatible // indirect
 	github.com/goccy/go-json v0.10.2 // indirect
 	github.com/jackc/pgerrcode v0.0.0-20220416144525-469b46aa5efa // indirect
 	github.com/jackc/puddle/v2 v2.2.1 // indirect
@@ -31,7 +33,6 @@ require (
 	golang.org/x/arch v0.3.0 // indirect
 	golang.org/x/sys v0.17.0 // indirect
 	google.golang.org/protobuf v1.30.0 // indirect
-	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
 
 require (
