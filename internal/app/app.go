@@ -5,6 +5,8 @@ package app
 import "context"
 
 // App defines a method for searching with keywords and a limit.
+//
+//go:generate mockery --name=App
 type App interface {
 	Search(ctx context.Context, keywords []string, limit int) (map[string]string, error)
 }

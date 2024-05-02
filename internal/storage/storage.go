@@ -7,6 +7,8 @@ import (
 )
 
 // Storager is used for interacting with a storage system in a consistent way.
+//
+//go:generate mockery --name=Storager
 type Storager interface {
 	GetComices(ctx context.Context, keywords []string, limit int) (map[string]string, error)
 	Write(ctx context.Context, data []models.Comic) error
