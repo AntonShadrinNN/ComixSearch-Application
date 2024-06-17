@@ -10,6 +10,17 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+//	@Summary		Get comices
+//	@Description	Returns comices based on user input
+//	@Produce		json
+//	@Param			keywords	body	userRequest	true	"Keywords for comic's search"
+//	@Router			/search{limit} [post]
+//
+//	@Success		200	{object}	Response	"Comices have been received successfully"
+//
+//	@Failure		400	{object}	Response	"Invalid parameters"
+//	@Failure		500	{object}	Response	"Search app receiving caused error"
+//
 // search retrieves comices based on user input.
 func search(ctx context.Context, a app.App) gin.HandlerFunc {
 	return func(c *gin.Context) {

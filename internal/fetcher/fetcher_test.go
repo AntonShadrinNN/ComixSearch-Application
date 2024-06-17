@@ -3,9 +3,12 @@ package fetcher
 import (
 	"bytes"
 	"comixsearch/internal/fetcher/mocks"
+	"comixsearch/internal/models"
+	"context"
 	"fmt"
 	"io"
 	"net/http"
+	"runtime"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -62,80 +65,76 @@ func TestGetComicesCount(t *testing.T) {
 	}
 }
 
-// func TestGetData(t *testing.T) {
-// 	urlArchive, urlComices := "", ""
-// 	someErr := fmt.Errorf("some error")
+func TestGetData(t *testing.T) {
+	urlArchive, urlComices := "", ""
+	someErr := fmt.Errorf("some error")
 
-// 	tests := []struct {
-// 		name     string
-// 		jsonBody string
-// 		comic    models.Comic
-// 		err      error
-// 		jsonErr error
-// 	}{
-// 		{
-// 			name: "No error",
-// 			jsonBody: `{
-// 				"num": 1,
-// 				"title": "title",
-// 				"transcript": "transcript",
-// 				"img": "img"
-// 			}`,
-// 			comic: models.Comic{
-// 				Id:      1,
-// 				Title:   "title",
-// 				Content: "transcript",
-// 				Link:    "img",
-// 			},
-// 			err: nil,
-// 			jsonErr: nil,
-// 		},
-// 		{
-// 			name: "Request error",
-// 			jsonBody: `{
-// 				"num": 1,
-// 				"title": "title",
-// 				"transcript": "transcript",
-// 				"img": "img"
-// 			}`,
-// 			comic: models.Comic{},
-// 			err:   someErr,
-// 			jsonErr: nil,
-// 		},
-// 		{
-// 			name: "Json parse error",
-// 			jsonBody: `{
-// 				"num": 1
-// 				"tit
-// 			}`,
-// 			comic: models.Comic{},
-// 			err:   nil,
-// 			jsonErr: someErr,
-// 		},
-// 	}
+	tests := []struct {
+		name     string
+		jsonBody string
+		comic    models.Comic
+		err      error
+		jsonErr  error
+	}{
+		{
+			name: "No error",
+			jsonBody: `{
+				"num": 1,
+				"title": "title",
+				"transcript": "transcript",
+				"img": "img"
+			}`,
+			comic: models.Comic{
+				Id:      1,
+				Title:   "title",
+				Content: "transcript",
+				Link:    "img",
+			},
+			err:     nil,
+			jsonErr: nil,
+		},
+		{
+			name: "Request error",
+			jsonBody: `{
+				"num": 1,
+				"title": "title",
+				"transcript": "transcript",
+				"img": "img"
+			}`,
+			comic:   models.Comic{},
+			err:     someErr,
+			jsonErr: nil,
+		},
+		{
+			name: "Json parse error",
+			jsonBody: `{
+				"num": 1
+				"tit
+			}`,
+			comic:   models.Comic{},
+			err:     nil,
+			jsonErr: someErr,
+		},
+	}
 
-// 	ctx := context.Background()
-// 	maxProc := runtime.NumCPU()
-// 	lastId := 0
+	ctx := context.Background()
+	maxProc := runtime.NumCPU()
+	lastId := 0
 
-// 	for _, tt := range tests {
-// 		t.Run(tt.name, func(t *testing.T) {
-// 			mockClient := mocks.NewClient(t)
-// 			fetcher := NewFetcher(urlArchive, urlComices, mockClient)
-// 			resp := http.Response{
-// 				Body: io.NopCloser(bytes.NewBufferString(tt.jsonBody)),
-// 			}
-// 			mockClient.On("Do", mock.Anything).Return(&resp, tt.err)
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			mockClient := mocks.NewClient(t)
+			fetcher := NewFetcher(urlArchive, urlComices, mockClient)
+			resp := http.Response{
+				Body: io.NopCloser(bytes.NewBufferString(tt.jsonBody)),
+			}
+			mockClient.On("Do", mock.Anything).Return(&resp, tt.err)
 
-// 			data, err := fetcher.GetData(ctx, maxProc, int64(lastId))
+			data, _ := fetcher.GetData(ctx, maxProc, int64(lastId))
 
-// 			for _, c := range data{
-// 				assert.Equal(t, tt.comic, c)
-// 			}
-
-// 			if err != nil && {
-
-// 			}
-// 		})
-// 	}
-// }
+			for _, c := range data {
+				assert.Equal(t, tt.comic, c)
+			}
+		})
+	}
+}
