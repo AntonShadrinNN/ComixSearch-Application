@@ -1,0 +1,5 @@
+---
+urlArchive: https://xkcd.com/info.0.json
+urlComic: https://xkcd.com/%d/info.0.json
+dbConn: postgresql://admin:pass@127.0.0.1:5432/postgres
+port: :8080
