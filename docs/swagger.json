@@ -1,0 +1,91 @@
+{
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "schemes": [
+        "http"
+    ],
+    "swagger": "2.0",
+    "info": {
+        "description": "A collection of endpoints available to retrieve the comices for a specific keywords.",
+        "title": "Comic search application documentation",
+        "contact": {
+            "name": "Maintainers",
+            "url": "https://github.com/AntonShadrinNN/ComixSearch-Application.git",
+            "email": "svebo3348@gmail.com"
+        },
+        "version": "1.0.0"
+    },
+    "host": "localhost:8080",
+    "paths": {
+        "/search{limit}": {
+            "post": {
+                "description": "Returns comices based on user input",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Get comices",
+                "parameters": [
+                    {
+                        "description": "Keywords for comic's search",
+                        "name": "keywords",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/httpgin.userRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Comices have been received successfully",
+                        "schema": {
+                            "$ref": "#/definitions/httpgin.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid parameters",
+                        "schema": {
+                            "$ref": "#/definitions/httpgin.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Search app receiving caused error",
+                        "schema": {
+                            "$ref": "#/definitions/httpgin.Response"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "httpgin.Response": {
+            "type": "object",
+            "properties": {
+                "comices": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "string"
+                    },
+                    "example": {
+                        "earth": "http://xkcd/earth"
+                    }
+                },
+                "error": {}
+            }
+        },
+        "httpgin.userRequest": {
+            "type": "object",
+            "properties": {
+                "keywords": {
+                    "type": "string",
+                    "example": "earth"
+                }
+            }
+        }
+    }
+}

@@ -82,7 +82,6 @@ func Run(ctx context.Context, a app.App, httpPort string) error {
 	if err := eg.Wait(); err != nil {
 		return err
 	}
-
 	return nil
 
 }
@@ -91,6 +90,7 @@ func Run(ctx context.Context, a app.App, httpPort string) error {
 func serve(ctx context.Context, a app.App, httpPort string) func() error {
 	return func() error {
 		httpServer := NewHTTPServer(ctx, httpPort, a)
+		log.Printf("App run %s", httpServer.Addr)
 		errCh := make(chan error)
 
 		defer func() {
