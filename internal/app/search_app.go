@@ -53,12 +53,14 @@ func NewApp(ctx context.Context, conf config.Config) (SearchApp, error) {
 
 	comices, err := s.fetchComices(ctx, lastId)
 	if err != nil {
+		s.storage.Close()
 		return SearchApp{}, err
 	}
 	log.Println("Fetch is success")
 
 	comices, err = s.processData(ctx, comices)
 	if err != nil {
+		s.storage.Close()
 		return SearchApp{}, err
 	}
 	log.Println("Process is success")
