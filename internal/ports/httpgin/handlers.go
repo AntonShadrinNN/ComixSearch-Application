@@ -27,7 +27,7 @@ func search(ctx context.Context, a app.App) gin.HandlerFunc {
 		}
 		var reqBody userRequest
 		if err := c.Bind(&reqBody); err != nil {
-			c.Status(http.StatusBadRequest)
+			c.JSON(http.StatusBadRequest, createErrorResp(err))
 			return
 		}
 
@@ -37,6 +37,7 @@ func search(ctx context.Context, a app.App) gin.HandlerFunc {
 		if err != nil {
 			c.Status(http.StatusInternalServerError)
 			c.JSON(http.StatusInternalServerError, createErrorResp(err))
+			return
 		}
 
 		c.JSON(http.StatusOK, createSuccessResp(data, nil))

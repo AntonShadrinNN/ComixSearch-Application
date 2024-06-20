@@ -9,28 +9,23 @@ import (
 	"log"
 	"net/http"
 	"sync"
-	"time"
 
 	"golang.org/x/sync/errgroup"
 )
 
 // XkcdFetcher is used to fetch XKCD comic information from specified URLs using an HTTP client.
 type XkcdFetcher struct {
-	UrlArchive string      //  for accessing the XKCD comic archive.
-	UrlComic   string      // is the URL used to fetch the latest XKCD comic from the XKCD website
-	client     http.Client // is used to make HTTP requests when fetching data from the XKCD API.
+	UrlArchive string //  for accessing the XKCD comic archive.
+	UrlComic   string // is the URL used to fetch the latest XKCD comic from the XKCD website
+	client     Client // is used to make HTTP requests when fetching data from the XKCD API.
 }
 
 // The NewFetcher function initializes an XkcdFetcher instance.
-func NewFetcher(UrlArchive, UrlComix string) XkcdFetcher {
-	c := http.Client{
-		Timeout: 10 * time.Second,
-	}
-
+func NewFetcher(UrlArchive, UrlComix string, client Client) XkcdFetcher {
 	return XkcdFetcher{
 		UrlArchive: UrlArchive,
 		UrlComic:   UrlComix,
-		client:     c,
+		client:     client,
 	}
 }
 

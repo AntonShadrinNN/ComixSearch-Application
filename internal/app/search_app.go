@@ -3,7 +3,6 @@
 package app
 
 import (
-	"comixsearch/internal/app/interfaces"
 	"comixsearch/internal/config"
 	"comixsearch/internal/fetcher"
 	"comixsearch/internal/models"
@@ -11,21 +10,23 @@ import (
 	"comixsearch/internal/storage"
 	"context"
 	"log"
+	"net/http"
+	"time"
 )
 
 // SearchApp encapsulates components for normalizing, fetching, storing data, logging, and
 // setting maximum processing capacity.
 type SearchApp struct {
-	normalizer stem.Normalizer   // is likely used for text normalization.
-	fetcher    fetcher.Fetcher   // is responsible for retrieving data from external sources.
-	storage    storage.Storager  // is responsible for storing and managing data within the search application.
-	logger     interfaces.Logger // is likely used for logging messages, errors, and other information related to the application's operations.
-	maxProc    int               // us maximum number of concurrent processes that the application can handle.
+	normalizer stem.Normalizer  // is likely used for text normalization.
+	fetcher    fetcher.Fetcher  // is responsible for retrieving data from external sources.
+	storage    storage.Storager // is responsible for storing and managing data within the search application.
+	maxProc    int              // us maximum number of concurrent processes that the application can handle.
 }
 
 // The NewApp function initializes an SearchApp instance.
 func NewApp(ctx context.Context, conf config.Config) (SearchApp, error) {
-	fetcher := fetcher.NewFetcher(conf.UrlArchive, conf.UrlComic)
+	client := fetcher.NewHTTPClient(http.Client{Timeout: 10 * time.Second})
+	fetcher := fetcher.NewFetcher(conf.UrlArchive, conf.UrlComic, client)
 	stemmer := stem.NewStem("english", true)
 	var (
 		err    error
@@ -47,7 +48,7 @@ func NewApp(ctx context.Context, conf config.Config) (SearchApp, error) {
 
 	lastId, err = s.storage.GetLastId(ctx)
 	if err != nil {
-		return SearchApp{}, err
+		lastId = 0
 	}
 
 	comices, err := s.fetchComices(ctx, lastId)
